@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detection Results</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        img { margin-top: 20px; max-width: 400px; border: 2px solid #ccc; }
+        a { display: block; margin-top: 20px; padding: 10px; background-color: #007BFF; color: white; text-decoration: none; }
+        a:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Detection Results</h1>
+    <img src="{{ url_for('static', filename='uploads/' + image) }}" width="400">
+    <h2>Detected Objects:</h2>
+    <ul>
+        {% for obj in detections %}
+            <li>{{ obj }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Upload Another Image</a>
+</body>
+</html>
