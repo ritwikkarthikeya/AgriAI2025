@@ -1,12 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Detection</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; }
-        img { margin-top: 20px; max-width: 400px; border: 2px solid #ccc; }
-        button { margin-top: 10px; padding: 10px 20px; background-color: #007BFF; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            background: #ff9800;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        label:hover {
+            background: #e68900;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 400px;
+            border: 4px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #388E3C;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
     </style>
     <script>
         function previewImage(event) {
@@ -20,15 +95,36 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        async function uploadImage(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            let response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            let result = await response.json();
+            if (result.error) {
+                document.getElementById('result').innerHTML = "❌ " + result.error;
+                document.getElementById('result').style.color = 'red';
+            } else {
+                document.getElementById('result').innerHTML = `✅ ${result.DetectedObject} - ${result.Prediction || result.Detections.join(", ")} <br> Confidence: ${result.Confidence || "N/A"}`;
+                document.getElementById('result').style.color = 'lightgreen';
+            }
+        }
     </script>
 </head>
 <body>
-    <h1>Upload Image for Detection</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="image" onchange="previewImage(event)" required>
-        <img id="preview" style="display:none;" />
+    <h1>Image Detection 🔍</h1>
+    <form onsubmit="uploadImage(event)" enctype="multipart/form-data">
+        <label for="file">Choose an Image</label>
+        <input type="file" id="file" name="file" onchange="previewImage(event)" accept=".jpg,.jpeg,.png" required>
+        <br>
+        <img id="preview" />
         <br>
         <button type="submit">Upload</button>
     </form>
+
+    <div id="result"></div>
 </body>
 </html>

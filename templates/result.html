@@ -1,23 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detection Results</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; }
-        img { margin-top: 20px; max-width: 400px; border: 2px solid #ccc; }
-        a { display: block; margin-top: 20px; padding: 10px; background-color: #007BFF; color: white; text-decoration: none; }
-        a:hover { background-color: #0056b3; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 400px;
+            border: 4px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        ul {
+            list-style: none;
+            margin-top: 10px;
+            padding: 0;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 1.1rem;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #ff9800;
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        a:hover {
+            background-color: #e68900;
+        }
     </style>
 </head>
 <body>
-    <h1>Detection Results</h1>
-    <img src="{{ url_for('static', filename='uploads/' + image) }}" width="400">
+    <h1>Detection Results 🔍</h1>
+    <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Detected Image">
     <h2>Detected Objects:</h2>
     <ul>
         {% for obj in detections %}
             <li>{{ obj }}</li>
         {% endfor %}
     </ul>
-    <a href="/">Upload Another Image</a>
+    <a href="/">🔄 Upload Another Image</a>
 </body>
 </html>
